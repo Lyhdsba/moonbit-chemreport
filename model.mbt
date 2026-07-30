@@ -94,6 +94,21 @@ pub fn warning(severity : Severity, message : String) -> ReportWarning {
 }
 
 ///|
+pub fn info(message : String) -> ReportWarning {
+  warning(Info, message)
+}
+
+///|
+pub fn caution(message : String) -> ReportWarning {
+  warning(Caution, message)
+}
+
+///|
+pub fn hazard(message : String) -> ReportWarning {
+  warning(Hazard, message)
+}
+
+///|
 pub fn source(label : String, citation : String, url~ : String = "") -> DataSource {
   { label, citation, url }
 }

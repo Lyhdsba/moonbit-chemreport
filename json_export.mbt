@@ -1,6 +1,7 @@
 ///|
 fn json_escape(s : String) -> String {
-  s.replace_all(old="\\", new="\\\\")
+  s
+  .replace_all(old="\\", new="\\\\")
   .replace_all(old="\"", new="\\\"")
   .replace_all(old="\n", new="\\n")
 }
@@ -62,11 +63,26 @@ pub fn ChemReport::to_json(self : ChemReport) -> String {
     json_field("title", json_string(self.title)),
     json_field("summary", json_string(self.summary)),
     json_field("inputs", json_array([ for i in self.inputs => input_json(i) ])),
-    json_field("assumptions", json_array([ for a in self.assumptions => assumption_json(a) ])),
-    json_field("formulas", json_array([ for f in self.formulas => formula_json(f) ])),
-    json_field("results", json_array([ for r in self.results => result_json(r) ])),
-    json_field("warnings", json_array([ for w in self.warnings => warning_json(w) ])),
-    json_field("sources", json_array([ for s in self.sources => source_json(s) ])),
+    json_field(
+      "assumptions",
+      json_array([ for a in self.assumptions => assumption_json(a) ]),
+    ),
+    json_field(
+      "formulas",
+      json_array([ for f in self.formulas => formula_json(f) ]),
+    ),
+    json_field(
+      "results",
+      json_array([ for r in self.results => result_json(r) ]),
+    ),
+    json_field(
+      "warnings",
+      json_array([ for w in self.warnings => warning_json(w) ]),
+    ),
+    json_field(
+      "sources",
+      json_array([ for s in self.sources => source_json(s) ]),
+    ),
   ]
   "{\{fields.join(", ")}}"
 }

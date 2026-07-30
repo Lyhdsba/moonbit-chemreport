@@ -19,7 +19,7 @@ repository = "https://github.com/Lyhdsba/moonbit-chemreport"
 
 license = "Apache-2.0"
 
-keywords = ["chemical-engineering", "report", "markdown", "html", "json"]
+keywords = [ "chemical-engineering", "report", "markdown", "html", "json" ]
 
 preferred_target = "wasm-gc"
 

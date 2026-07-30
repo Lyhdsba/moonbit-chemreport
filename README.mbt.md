@@ -35,31 +35,33 @@ The CLI prints the built-in CSTR mass-balance report as Markdown.
 ## API Sketch
 
 ```mbt nocheck
+///|
 let r = report(
   "CSTR A-101 Mass Balance",
   summary="A stable report record for a reactor inlet/outlet balance.",
   inputs=[
-    input("feed flow", quantity("100.0", "kmol/h"), note="measured at battery limit"),
+    input(
+      "feed flow",
+      quantity("100.0", "kmol/h"),
+      note="measured at battery limit",
+    ),
   ],
-  assumptions=[
-    assumption("steady state", "accumulation term is zero"),
-  ],
-  formulas=[
-    formula("A in", "F_A,in = F_feed * z_A", ["F_feed", "z_A"]),
-  ],
+  assumptions=[assumption("steady state", "accumulation term is zero")],
+  formulas=[formula("A in", "F_A,in = F_feed * z_A", ["F_feed", "z_A"])],
   results=[
     result("A feed", quantity("42.0", "kmol/h"), procedure="100.0 * 0.42"),
   ],
-  warnings=[
-    caution("conversion target should be reconciled before scale-up"),
-  ],
-  sources=[
-    source("design basis", "internal design basis document"),
-  ],
+  warnings=[caution("conversion target should be reconciled before scale-up")],
+  sources=[source("design basis", "internal design basis document")],
 )
 
+///|
 let markdown = r.to_markdown()
+
+///|
 let html = r.to_html_document()
+
+///|
 let json = r.to_json()
 ```
 

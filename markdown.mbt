@@ -82,11 +82,34 @@ pub fn ChemReport::to_markdown(self : ChemReport) -> String {
     lines.push(self.summary)
     lines.push("")
   }
-  push_all(lines, section("Inputs", [ for i in self.inputs => input_markdown(i) ]))
-  push_all(lines, section("Assumptions", [ for a in self.assumptions => assumption_markdown(a) ]))
-  push_all(lines, section("Formulas", [ for f in self.formulas => formula_markdown(f) ]))
-  push_all(lines, section("Results", [ for r in self.results => result_markdown(r) ]))
-  push_all(lines, section("Warnings", [ for w in self.warnings => warning_markdown(w) ]))
-  push_all(lines, section("Data Sources", [ for s in self.sources => source_markdown(s) ]))
+  push_all(
+    lines,
+    section("Inputs", [ for i in self.inputs => input_markdown(i) ]),
+  )
+  push_all(
+    lines,
+    section(
+      "Assumptions",
+      [
+        for a in self.assumptions => assumption_markdown(a)
+      ],
+    ),
+  )
+  push_all(
+    lines,
+    section("Formulas", [ for f in self.formulas => formula_markdown(f) ]),
+  )
+  push_all(
+    lines,
+    section("Results", [ for r in self.results => result_markdown(r) ]),
+  )
+  push_all(
+    lines,
+    section("Warnings", [ for w in self.warnings => warning_markdown(w) ]),
+  )
+  push_all(
+    lines,
+    section("Data Sources", [ for s in self.sources => source_markdown(s) ]),
+  )
   lines.join("\n")
 }

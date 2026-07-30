@@ -69,7 +69,7 @@ pub fn quantity(value : String, unit : String) -> Quantity {
 }
 
 ///|
-pub fn input(name : String, value : Quantity, note~ : String = "") -> ChemInput {
+pub fn input(name : String, value : Quantity, note? : String = "") -> ChemInput {
   { name, value, note }
 }
 
@@ -79,12 +79,20 @@ pub fn assumption(title : String, detail : String) -> Assumption {
 }
 
 ///|
-pub fn formula(name : String, expression : String, variables : Array[String]) -> Formula {
+pub fn formula(
+  name : String,
+  expression : String,
+  variables : Array[String],
+) -> Formula {
   { name, expression, variables }
 }
 
 ///|
-pub fn result(name : String, value : Quantity, procedure~ : String = "") -> ChemResult {
+pub fn result(
+  name : String,
+  value : Quantity,
+  procedure? : String = "",
+) -> ChemResult {
   { name, value, procedure }
 }
 
@@ -109,20 +117,24 @@ pub fn hazard(message : String) -> ReportWarning {
 }
 
 ///|
-pub fn source(label : String, citation : String, url~ : String = "") -> DataSource {
+pub fn source(
+  label : String,
+  citation : String,
+  url? : String = "",
+) -> DataSource {
   { label, citation, url }
 }
 
 ///|
 pub fn report(
   title : String,
-  summary~ : String = "",
-  inputs~ : Array[ChemInput] = [],
-  assumptions~ : Array[Assumption] = [],
-  formulas~ : Array[Formula] = [],
-  results~ : Array[ChemResult] = [],
-  warnings~ : Array[ReportWarning] = [],
-  sources~ : Array[DataSource] = [],
+  summary? : String = "",
+  inputs? : Array[ChemInput] = [],
+  assumptions? : Array[Assumption] = [],
+  formulas? : Array[Formula] = [],
+  results? : Array[ChemResult] = [],
+  warnings? : Array[ReportWarning] = [],
+  sources? : Array[DataSource] = [],
 ) -> ChemReport {
   { title, summary, inputs, assumptions, formulas, results, warnings, sources }
 }

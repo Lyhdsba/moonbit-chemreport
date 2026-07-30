@@ -1,7 +1,5 @@
 import {
-  "Lyhdsba/moonbit-chemreport" @chemreport
+  "Lyhdsba/moonbit-chemreport" @chemreport,
 }
 
-options(
-  "is-main": true,
-)
+pkgtype(kind: "executable")

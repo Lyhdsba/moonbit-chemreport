@@ -1,6 +1,7 @@
 ///|
 fn html_escape(s : String) -> String {
-  s.replace_all(old="&", new="&amp;")
+  s
+  .replace_all(old="&", new="&amp;")
   .replace_all(old="<", new="&lt;")
   .replace_all(old=">", new="&gt;")
   .replace_all(old="\"", new="&quot;")
@@ -24,7 +25,9 @@ fn html_section(title : String, items : Array[String]) -> String {
 ///|
 fn input_html(i : ChemInput) -> String {
   let suffix = if i.note == "" { "" } else { " - \{html_escape(i.note)}" }
-  li("<strong>\{html_escape(i.name)}</strong>: \{html_escape(quantity_text(i.value))}\{suffix}")
+  li(
+    "<strong>\{html_escape(i.name)}</strong>: \{html_escape(quantity_text(i.value))}\{suffix}",
+  )
 }
 
 ///|
@@ -39,19 +42,29 @@ fn formula_html(f : Formula) -> String {
   } else {
     " <small>\{html_escape(f.variables.join(", "))}</small>"
   }
-  li("<strong>\{html_escape(f.name)}</strong>: <code>\{html_escape(f.expression)}</code>\{vars}")
+  li(
+    "<strong>\{html_escape(f.name)}</strong>: <code>\{html_escape(f.expression)}</code>\{vars}",
+  )
 }
 
 ///|
 fn result_html(r : ChemResult) -> String {
-  let suffix = if r.procedure == "" { "" } else { " - \{html_escape(r.procedure)}" }
-  li("<strong>\{html_escape(r.name)}</strong>: \{html_escape(quantity_text(r.value))}\{suffix}")
+  let suffix = if r.procedure == "" {
+    ""
+  } else {
+    " - \{html_escape(r.procedure)}"
+  }
+  li(
+    "<strong>\{html_escape(r.name)}</strong>: \{html_escape(quantity_text(r.value))}\{suffix}",
+  )
 }
 
 ///|
 fn warning_html(w : ReportWarning) -> String {
   let sev = severity_text(w.severity)
-  li("<strong data-severity=\"\{sev}\">\{sev}</strong>: \{html_escape(w.message)}")
+  li(
+    "<strong data-severity=\"\{sev}\">\{sev}</strong>: \{html_escape(w.message)}",
+  )
 }
 
 ///|
@@ -69,9 +82,18 @@ fn source_html(s : DataSource) -> String {
 pub fn ChemReport::to_html_fragment(self : ChemReport) -> String {
   let parts : Array[String] = [
     tag("h1", html_escape(self.title)),
-    if self.summary == "" { "" } else { tag("p", html_escape(self.summary)) },
+    if self.summary == "" {
+      ""
+    } else {
+      tag("p", html_escape(self.summary))
+    },
     html_section("Inputs", [ for i in self.inputs => input_html(i) ]),
-    html_section("Assumptions", [ for a in self.assumptions => assumption_html(a) ]),
+    html_section(
+      "Assumptions",
+      [
+        for a in self.assumptions => assumption_html(a)
+      ],
+    ),
     html_section("Formulas", [ for f in self.formulas => formula_html(f) ]),
     html_section("Results", [ for r in self.results => result_html(r) ]),
     html_section("Warnings", [ for w in self.warnings => warning_html(w) ]),

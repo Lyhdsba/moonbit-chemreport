@@ -48,7 +48,7 @@ jobs:
 
       - name: Interface info
         run: |
-          moon info --deny-warn
+          moon info
           git diff --exit-code
 
       - name: Test

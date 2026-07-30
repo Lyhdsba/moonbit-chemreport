@@ -1,0 +1,116 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Lyhdsba/moonbit-chemreport"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn assumption(String, String) -> Assumption
+
+pub fn caution(String) -> ReportWarning
+
+pub fn formula(String, String, Array[String]) -> Formula
+
+pub fn hazard(String) -> ReportWarning
+
+pub fn info(String) -> ReportWarning
+
+pub fn input(String, Quantity, note? : String) -> ChemInput
+
+pub fn issue(ReportIssueKind, String) -> ReportIssue
+
+pub fn quantity(String, String) -> Quantity
+
+pub fn report(String, summary? : String, inputs? : Array[ChemInput], assumptions? : Array[Assumption], formulas? : Array[Formula], results? : Array[ChemResult], warnings? : Array[ReportWarning], sources? : Array[DataSource]) -> ChemReport
+
+pub fn result(String, Quantity, procedure? : String) -> ChemResult
+
+pub fn sample_mass_balance_report() -> ChemReport
+
+pub fn source(String, String, url? : String) -> DataSource
+
+pub fn warning(Severity, String) -> ReportWarning
+
+// Errors
+
+// Types and methods
+pub struct Assumption {
+  title : String
+  detail : String
+} derive(Eq, @debug.Debug)
+
+pub struct ChemInput {
+  name : String
+  value : Quantity
+  note : String
+} derive(Eq, @debug.Debug)
+
+pub struct ChemReport {
+  title : String
+  summary : String
+  inputs : Array[ChemInput]
+  assumptions : Array[Assumption]
+  formulas : Array[Formula]
+  results : Array[ChemResult]
+  warnings : Array[ReportWarning]
+  sources : Array[DataSource]
+} derive(Eq, @debug.Debug)
+pub fn ChemReport::has_blocking_issue(Self) -> Bool
+pub fn ChemReport::to_html_document(Self) -> String
+pub fn ChemReport::to_html_fragment(Self) -> String
+pub fn ChemReport::to_json(Self) -> String
+pub fn ChemReport::to_markdown(Self) -> String
+pub fn ChemReport::validate(Self) -> Array[ReportIssue]
+
+pub struct ChemResult {
+  name : String
+  value : Quantity
+  procedure : String
+} derive(Eq, @debug.Debug)
+
+pub struct DataSource {
+  label : String
+  citation : String
+  url : String
+} derive(Eq, @debug.Debug)
+
+pub struct Formula {
+  name : String
+  expression : String
+  variables : Array[String]
+} derive(Eq, @debug.Debug)
+
+pub struct Quantity {
+  value : String
+  unit : String
+} derive(Eq, @debug.Debug)
+
+pub struct ReportIssue {
+  kind : ReportIssueKind
+  message : String
+} derive(Eq, @debug.Debug)
+
+pub enum ReportIssueKind {
+  MissingTitle
+  MissingInput
+  MissingResult
+  MissingSource
+  HazardWarning
+} derive(Eq, @debug.Debug)
+
+pub struct ReportWarning {
+  severity : Severity
+  message : String
+} derive(Eq, @debug.Debug)
+
+pub enum Severity {
+  Info
+  Caution
+  Hazard
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits
+

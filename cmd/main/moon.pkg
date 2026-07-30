@@ -1,6 +1,6 @@
-// import {
-//   "2515050243qyf/moonbit-chemreport" @lib,
-// }
+import {
+  "Lyhdsba/moonbit-chemreport" @chemreport
+}
 
 options(
   "is-main": true,

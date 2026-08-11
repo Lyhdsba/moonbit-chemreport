@@ -11,7 +11,7 @@
 
 name = "Lyhdsba/moonbit-chemreport"
 
-version = "0.1.0"
+version = "0.2.0"
 
 readme = "README.mbt.md"
 
@@ -19,7 +19,15 @@ repository = "https://github.com/Lyhdsba/moonbit-chemreport"
 
 license = "Apache-2.0"
 
-keywords = [ "chemical-engineering", "report", "markdown", "html", "json" ]
+keywords = [
+  "chemical-engineering",
+  "report",
+  "benchmark",
+  "bundle",
+  "markdown",
+  "html",
+  "json",
+]
 
 preferred_target = "wasm-gc"
 

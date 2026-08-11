@@ -5,6 +5,7 @@ fn html_escape(s : String) -> String {
   .replace_all(old="<", new="&lt;")
   .replace_all(old=">", new="&gt;")
   .replace_all(old="\"", new="&quot;")
+  .replace_all(old="'", new="&#39;")
 }
 
 ///|

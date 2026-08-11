@@ -24,9 +24,11 @@ moonbit-chemreport：MoonBit 化工计算报告生成器
 
 本地和 CI 执行 `moon fmt --check`、`moon check --deny-warn`、`moon info`、`moon test --deny-warn`。测试覆盖示例报告校验、Markdown 快照、JSON/HTML 关键字段、缺失输入/结果/来源时的问题提示。CI 运行于 Linux、macOS、Windows 三个平台，保证基础跨平台可用。
 
-## 开发计划
+## 开发计划与阶段进展
 
 第一阶段完成报告模型、三种导出格式、示例 CLI、快照测试、README、License、GitHub/GitLink 公开仓库和 CI。第二阶段补充更多化工报告模板，如能量衡算、精馏塔板效率、反应器转化率摘要。第三阶段预留适配层，接入未来 MoonBit 化工计算包，并沉淀 Mooncakes 发布说明和版本兼容策略。
+
+初审通过后的推进已完成第二阶段的主体工程化扩展：新增单报告完整度指标与可发布判定，新增 ReportBundle 批量校验、聚合统计和组合导出，补充能量衡算、二元精馏物料衡算和反应器转化率示例，并加入来自 NIST Chemistry WebBook SRD 69 的水、乙醇、苯 Antoine 方程基准记录。下一步将围绕适配层、版本兼容和 Mooncakes 发布说明继续推进，保持报告模型与具体计算库解耦。
 
 ## 开源说明
 

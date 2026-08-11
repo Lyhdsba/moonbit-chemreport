@@ -4,6 +4,10 @@ fn json_escape(s : String) -> String {
   .replace_all(old="\\", new="\\\\")
   .replace_all(old="\"", new="\\\"")
   .replace_all(old="\n", new="\\n")
+  .replace_all(old="\r", new="\\r")
+  .replace_all(old="\t", new="\\t")
+  .replace_all(old="\b", new="\\b")
+  .replace_all(old="\f", new="\\f")
 }
 
 ///|

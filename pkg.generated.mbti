@@ -20,13 +20,25 @@ pub fn input(String, Quantity, note? : String) -> ChemInput
 
 pub fn issue(ReportIssueKind, String) -> ReportIssue
 
+pub fn nist_benchmark_bundle() -> ReportBundle
+
+pub fn nist_vapor_pressure_benchmarks() -> Array[BenchmarkCase]
+
 pub fn quantity(String, String) -> Quantity
 
 pub fn report(String, summary? : String, inputs? : Array[ChemInput], assumptions? : Array[Assumption], formulas? : Array[Formula], results? : Array[ChemResult], warnings? : Array[ReportWarning], sources? : Array[DataSource]) -> ChemReport
 
+pub fn report_bundle(String, Array[ChemReport]) -> ReportBundle
+
 pub fn result(String, Quantity, procedure? : String) -> ChemResult
 
+pub fn sample_distillation_report() -> ChemReport
+
+pub fn sample_energy_balance_report() -> ChemReport
+
 pub fn sample_mass_balance_report() -> ChemReport
+
+pub fn sample_reactor_conversion_report() -> ChemReport
 
 pub fn source(String, String, url? : String) -> DataSource
 
@@ -38,6 +50,28 @@ pub fn warning(Severity, String) -> ReportWarning
 pub struct Assumption {
   title : String
   detail : String
+} derive(Eq, @debug.Debug)
+
+pub struct BenchmarkCase {
+  id : String
+  category : String
+  report : ChemReport
+} derive(Eq, @debug.Debug)
+
+pub struct BundleIssue {
+  report_index : Int
+  issue : ReportIssue
+} derive(Eq, @debug.Debug)
+
+pub struct BundleMetrics {
+  report_count : Int
+  publishable_count : Int
+  blocking_count : Int
+  input_count : Int
+  result_count : Int
+  source_count : Int
+  warning_count : Int
+  hazard_count : Int
 } derive(Eq, @debug.Debug)
 
 pub struct ChemInput {
@@ -57,6 +91,8 @@ pub struct ChemReport {
   sources : Array[DataSource]
 } derive(Eq, @debug.Debug)
 pub fn ChemReport::has_blocking_issue(Self) -> Bool
+pub fn ChemReport::is_publishable(Self) -> Bool
+pub fn ChemReport::metrics(Self) -> ReportMetrics
 pub fn ChemReport::to_html_document(Self) -> String
 pub fn ChemReport::to_html_fragment(Self) -> String
 pub fn ChemReport::to_json(Self) -> String
@@ -86,6 +122,16 @@ pub struct Quantity {
   unit : String
 } derive(Eq, @debug.Debug)
 
+pub struct ReportBundle {
+  title : String
+  reports : Array[ChemReport]
+} derive(Eq, @debug.Debug)
+pub fn ReportBundle::has_blocking_issue(Self) -> Bool
+pub fn ReportBundle::metrics(Self) -> BundleMetrics
+pub fn ReportBundle::to_json(Self) -> String
+pub fn ReportBundle::to_markdown(Self) -> String
+pub fn ReportBundle::validate(Self) -> Array[BundleIssue]
+
 pub struct ReportIssue {
   kind : ReportIssueKind
   message : String
@@ -97,6 +143,22 @@ pub enum ReportIssueKind {
   MissingResult
   MissingSource
   HazardWarning
+  EmptyInputName
+  EmptyInputValue
+  EmptyResultName
+  EmptyResultValue
+  EmptySourceCitation
+} derive(Eq, @debug.Debug)
+
+pub struct ReportMetrics {
+  input_count : Int
+  assumption_count : Int
+  formula_count : Int
+  result_count : Int
+  warning_count : Int
+  source_count : Int
+  issue_count : Int
+  hazard_count : Int
 } derive(Eq, @debug.Debug)
 
 pub struct ReportWarning {

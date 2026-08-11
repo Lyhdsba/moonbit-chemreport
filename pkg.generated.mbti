@@ -175,4 +175,3 @@ pub enum Severity {
 // Type aliases
 
 // Traits
-

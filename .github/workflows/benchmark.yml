@@ -1,0 +1,23 @@
+name: Benchmark
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install MoonBit stable
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: Run reproducible workload
+        run: |
+          moon version --all
+          moon update
+          moon run cmd/main > benchmark-output.md
+          test -s benchmark-output.md
+          grep -q "NIST benchmark bundle" benchmark-output.md

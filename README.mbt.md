@@ -10,7 +10,7 @@ The project is intentionally small at the boundary and expandable inside. It is
 not a process simulator. It is the part a simulator, spreadsheet importer, or
 operator-facing CLI can call after the numbers are already computed.
 
-## What It Provides
+## Core capabilities
 
 - A reusable `ChemReport` data model.
 - Constructors for quantities, calculation inputs, assumptions, formulas,
@@ -27,6 +27,19 @@ operator-facing CLI can call after the numbers are already computed.
 - Three NIST SRD 69 Antoine-equation benchmark records for water, ethanol, and
   benzene, each carrying CAS number, temperature range, coefficient values, and
   source URL.
+- Unit-aware scalar parsing and conversion for common engineering dimensions.
+- A searchable catalog of 980 engineering metrics and review contracts.
+- Deterministic report comparison, quality policies, CSV summaries, and JSONL.
+
+## CLI
+
+```bash
+moon run cmd/main
+```
+
+The CLI prints a Markdown example followed by the cited NIST benchmark bundle.
+The library benchmark runner measures export workload and output size locally;
+it does not make hardware-independent performance claims.
 
 ## Quick Start
 
@@ -74,7 +87,7 @@ let html = r.to_html_document()
 let json = r.to_json()
 ```
 
-## Package Shape
+## Architecture
 
 - `model.mbt`: report records and constructors.
 - `validate.mbt`: consistency checks and blocking issue detection.
@@ -86,24 +99,24 @@ let json = r.to_json()
 - `examples.mbt`: mass-balance, energy-balance, distillation, and reactor
   examples.
 - `benchmarks.mbt`: NIST SRD 69 Antoine benchmark records.
+- `units.mbt` and `scalars.mbt`: dimensions, unit catalog, parsing, and conversion.
+- `query.mbt`, `diff.mbt`, `policy.mbt`: discovery, comparison, and quality gates.
+- `csv.mbt`, `benchmark_runner.mbt`: tabular interchange and deterministic workloads.
+- `engineering_catalog.mbt`, `engineering_contracts_v2.mbt`: metric templates and review contracts.
 - `cmd/main`: simple runnable entry point.
 
-## Competition Fit
+## Design scope
 
-This project targets the MoonBit ecosystem's engineering infrastructure and
-application-ecosystem directions. It avoids reimplementing chemical calculations
+The package targets reusable engineering infrastructure. It avoids reimplementing chemical calculations
 already owned by future domain packages; instead it supplies the common reporting
 surface those packages need to present assumptions, formulas, warnings, and
 source traceability in one place.
 
-Before development, keyword checks around `chemreport`, `chemical report`,
-`massbalance`, `reactor`, and `distill` on mooncakes.io did not show a mature
-package with the same report-layer scope. The benchmark data is deliberately
-kept as report fixtures rather than a new property database, so the project
-continues to complement, rather than duplicate, future chemical calculation
-packages.
+Benchmark data is deliberately kept as report fixtures rather than a new
+property database, so the project complements future chemical calculation
+packages while keeping the report schema independent.
 
-## Quality Gates
+## Benchmarks, tests, and CI
 
 The repository is prepared for the current MoonBit toolchain flow:
 
@@ -114,9 +127,10 @@ moon info
 moon test --deny-warn
 ```
 
-The current MoonBit toolchain accepts strict warnings on moon check and moon
-test; moon info generates the checked-in public interface. CI runs these checks
-on Linux, macOS, and Windows.
+CI installs the current stable MoonBit toolchain and checks formatting,
+all-target type checking, native compilation, interface drift, tests, and the
+production source accounting on Linux, macOS, and Windows. Benchmark provenance
+and limitations are documented in [`docs/benchmarks.md`](docs/benchmarks.md).
 
 ## Source And Maintenance Notes
 

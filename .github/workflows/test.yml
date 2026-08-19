@@ -44,7 +44,10 @@ jobs:
         run: moon fmt --check
 
       - name: Check
-        run: moon check --deny-warn
+        run: moon check --target all --deny-warn
+
+      - name: Native build
+        run: moon build --target native
 
       - name: Interface info
         run: |
@@ -52,4 +55,11 @@ jobs:
           git diff --exit-code
 
       - name: Test
-        run: moon test --deny-warn
+        run: moon test --target all --deny-warn
+
+      - name: Count production MoonBit source
+        shell: bash
+        run: |
+          count=$(find . -name '*.mbt' -not -path './_build/*' -not -name '*_test.mbt' -not -name '*_wbtest.mbt' -print0 | xargs -0 cat | wc -l)
+          test "$count" -ge 8000
+          echo "production MoonBit source lines: $count"

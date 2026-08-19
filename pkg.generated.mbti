@@ -8,11 +8,39 @@ import {
 // Values
 pub fn assumption(String, String) -> Assumption
 
+pub fn benchmark_case(String, ChemReport) -> BenchmarkWork
+
+pub fn benchmark_suite(String, Array[BenchmarkWork]) -> BenchmarkSuite
+
 pub fn caution(String) -> ReportWarning
+
+pub fn change_text(ReportChange) -> String
+
+pub fn compare_reports(ChemReport, ChemReport) -> Array[ReportChange]
+
+pub fn compatible_units(String, String) -> Bool
+
+pub fn contract_for_metric(String) -> MetricContract?
+
+pub fn contract_is_complete(MetricContract, ChemReport) -> Bool
+
+pub fn convert_scalar(ScalarValue, String) -> Result[ScalarValue, ScalarError]
+
+pub fn engineering_metric_areas() -> Array[String]
+
+pub fn engineering_metric_catalog() -> Array[EngineeringMetric]
+
+pub fn engineering_metric_contracts() -> Array[MetricContract]
+
+pub fn find_engineering_metrics(String) -> Array[EngineeringMetric]
+
+pub fn flash_split_report() -> ChemReport
 
 pub fn formula(String, String, Array[String]) -> Formula
 
 pub fn hazard(String) -> ReportWarning
+
+pub fn heat_exchanger_report() -> ChemReport
 
 pub fn info(String) -> ReportWarning
 
@@ -20,15 +48,27 @@ pub fn input(String, Quantity, note? : String) -> ChemInput
 
 pub fn issue(ReportIssueKind, String) -> ReportIssue
 
+pub fn known_units(UnitDimension) -> Array[UnitSpec]
+
 pub fn nist_benchmark_bundle() -> ReportBundle
 
 pub fn nist_vapor_pressure_benchmarks() -> Array[BenchmarkCase]
+
+pub fn parse_scalar(String) -> Result[ScalarValue, ScalarError]
+
+pub fn pump_power_report() -> ChemReport
+
+pub fn quality_policy(min_inputs? : Int, min_formulas? : Int, min_results? : Int, require_source_url? : Bool, reject_hazards? : Bool) -> QualityPolicy
 
 pub fn quantity(String, String) -> Quantity
 
 pub fn report(String, summary? : String, inputs? : Array[ChemInput], assumptions? : Array[Assumption], formulas? : Array[Formula], results? : Array[ChemResult], warnings? : Array[ReportWarning], sources? : Array[DataSource]) -> ChemReport
 
 pub fn report_bundle(String, Array[ChemReport]) -> ReportBundle
+
+pub fn report_summary_csv(Array[ChemReport]) -> String
+
+pub fn reports_jsonl(Array[ChemReport]) -> String
 
 pub fn result(String, Quantity, procedure? : String) -> ChemResult
 
@@ -40,7 +80,17 @@ pub fn sample_mass_balance_report() -> ChemReport
 
 pub fn sample_reactor_conversion_report() -> ChemReport
 
+pub fn scalar(String, String) -> ScalarValue
+
 pub fn source(String, String, url? : String) -> DataSource
+
+pub fn stoichiometric_yield_report() -> ChemReport
+
+pub fn unit_catalog() -> Array[UnitSpec]
+
+pub fn unit_dimension(String) -> UnitDimension?
+
+pub fn unit_spec(String, UnitDimension, String, offset? : String) -> UnitSpec
 
 pub fn warning(Severity, String) -> ReportWarning
 
@@ -55,6 +105,25 @@ pub struct Assumption {
 pub struct BenchmarkCase {
   id : String
   category : String
+  report : ChemReport
+} derive(Eq, @debug.Debug)
+
+pub struct BenchmarkResult {
+  suite : String
+  case_count : Int
+  iterations : Int
+  total_bytes : Int
+  publishable_cases : Int
+} derive(Eq, @debug.Debug)
+
+pub struct BenchmarkSuite {
+  name : String
+  cases : Array[BenchmarkWork]
+} derive(Eq, @debug.Debug)
+pub fn BenchmarkSuite::run(Self, Int) -> BenchmarkResult
+
+pub struct BenchmarkWork {
+  id : String
   report : ChemReport
 } derive(Eq, @debug.Debug)
 
@@ -90,14 +159,18 @@ pub struct ChemReport {
   warnings : Array[ReportWarning]
   sources : Array[DataSource]
 } derive(Eq, @debug.Debug)
+pub fn ChemReport::find_input(Self, String) -> ChemInput?
+pub fn ChemReport::find_result(Self, String) -> ChemResult?
 pub fn ChemReport::has_blocking_issue(Self) -> Bool
 pub fn ChemReport::is_publishable(Self) -> Bool
 pub fn ChemReport::metrics(Self) -> ReportMetrics
+pub fn ChemReport::section_counts(Self) -> Array[SectionCount]
 pub fn ChemReport::to_html_document(Self) -> String
 pub fn ChemReport::to_html_fragment(Self) -> String
 pub fn ChemReport::to_json(Self) -> String
 pub fn ChemReport::to_markdown(Self) -> String
 pub fn ChemReport::validate(Self) -> Array[ReportIssue]
+pub fn ChemReport::warnings_with_severity(Self, Severity) -> Array[ReportWarning]
 
 pub struct ChemResult {
   name : String
@@ -111,11 +184,42 @@ pub struct DataSource {
   url : String
 } derive(Eq, @debug.Debug)
 
+pub struct EngineeringMetric {
+  id : String
+  area : String
+  name : String
+  equation : String
+  quantity : String
+  guidance : String
+} derive(Eq, @debug.Debug)
+
 pub struct Formula {
   name : String
   expression : String
   variables : Array[String]
 } derive(Eq, @debug.Debug)
+
+pub struct MetricContract {
+  metric_id : String
+  required_unit : String
+  requires_formula : Bool
+  requires_source : Bool
+  review_question : String
+} derive(Eq, @debug.Debug)
+
+pub struct PolicyIssue {
+  code : String
+  message : String
+} derive(Eq, @debug.Debug)
+
+pub struct QualityPolicy {
+  min_inputs : Int
+  min_formulas : Int
+  min_results : Int
+  require_source_url : Bool
+  reject_hazards : Bool
+} derive(Eq, @debug.Debug)
+pub fn QualityPolicy::evaluate(Self, ChemReport) -> Array[PolicyIssue]
 
 pub struct Quantity {
   value : String
@@ -131,6 +235,17 @@ pub fn ReportBundle::metrics(Self) -> BundleMetrics
 pub fn ReportBundle::to_json(Self) -> String
 pub fn ReportBundle::to_markdown(Self) -> String
 pub fn ReportBundle::validate(Self) -> Array[BundleIssue]
+
+pub enum ReportChange {
+  TitleChanged
+  SummaryChanged
+  InputsChanged
+  AssumptionsChanged
+  FormulasChanged
+  ResultsChanged
+  WarningsChanged
+  SourcesChanged
+} derive(Eq, @debug.Debug)
 
 pub struct ReportIssue {
   kind : ReportIssueKind
@@ -166,10 +281,47 @@ pub struct ReportWarning {
   message : String
 } derive(Eq, @debug.Debug)
 
+pub enum ScalarError {
+  EmptyScalar
+  InvalidNumber
+  UnknownUnit(String)
+  IncompatibleUnits(String, String)
+  InvalidConversion
+} derive(Eq, @debug.Debug)
+
+pub struct ScalarValue {
+  value : String
+  unit : String
+} derive(Eq, @debug.Debug)
+
+pub struct SectionCount {
+  name : String
+  count : Int
+} derive(Eq, @debug.Debug)
+
 pub enum Severity {
   Info
   Caution
   Hazard
+} derive(Eq, @debug.Debug)
+
+pub enum UnitDimension {
+  Mass
+  Amount
+  Volume
+  Time
+  Temperature
+  Energy
+  Power
+  Pressure
+  Dimensionless
+} derive(Eq, @debug.Debug)
+
+pub struct UnitSpec {
+  symbol : String
+  dimension : UnitDimension
+  to_base : String
+  offset : String
 } derive(Eq, @debug.Debug)
 
 // Type aliases
